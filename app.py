@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from database import db
 from models.refeicao import Refeicao
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -57,8 +58,22 @@ def listar_uma_refeicao(id_refeicao):
 
 # Editar uma refeição
 @app.route("/refeicao/<int:id_refeicao>", methods=['PUT'])
-def editar_refeicao():
-    pass
+def editar_refeicao(id_refeicao):
+    data = request.json 
+    refeicao = Refeicao.query.get(id_refeicao)
+
+    if refeicao and data.get("nome") and data.get("descricao") and data.get("data_hora") and data.get("dentro_da_dieta"):
+
+        refeicao.nome = data.get("nome")
+        refeicao.descricao = data.get("descricao")
+        refeicao.dentro_da_dieta = data.get("dentro_da_dieta")
+        refeicao.data_hora = datetime.fromisoformat(data.get("data_hora").replace("Z", "+00:00"))
+
+        db.session.commit()
+
+        return jsonify({"message": f"Refeição {id_refeicao} atualizada."})
+    
+    return jsonify({"message": f"Não foi possível atualizar a refeição {id_refeicao}."}), 404
 
 
 # Apagar uma refeição
