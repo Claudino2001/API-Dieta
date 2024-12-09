@@ -47,8 +47,12 @@ def listar_refeicoes():
 
 # Visualizar uma única refeição
 @app.route("/refeicao/<int:id_refeicao>", methods=['GET'])
-def listar_uma_refeicao():
-    pass
+def listar_uma_refeicao(id_refeicao):
+    refeicao = Refeicao.query.get(id_refeicao)
+    if refeicao:
+        return jsonify({f"refeicao-{id_refeicao}": refeicao.to_dict()})
+    
+    return jsonify({"message": f"Refeição {id_refeicao} não encontrada."}), 404
 
 
 # Editar uma refeição
