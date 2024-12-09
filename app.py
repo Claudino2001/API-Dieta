@@ -78,8 +78,15 @@ def editar_refeicao(id_refeicao):
 
 # Apagar uma refeição
 @app.route("/refeicao/<int:id_refeicao>", methods=['DELETE'])
-def deletar_refeicao():
-    pass
+def deletar_refeicao(id_refeicao):
+    refeicao = Refeicao.query.get(id_refeicao)
+    
+    if refeicao:
+        db.session.delete(refeicao)
+        db.session.commit()
+        return jsonify({'message': f'Refeição {id_refeicao} deletada com sucesso.'}), 404
+
+    return jsonify({'message': f'Refeição {id_refeicao} não encontrada.'}), 404
 
 
 if __name__ == '__main__':
