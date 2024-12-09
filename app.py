@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from database import db
 from models.refeicao import Refeicao
 
@@ -19,7 +19,20 @@ def welcome():
 # Registrar uma refeição feita
 @app.route("/refeicao", methods=['POST'])
 def criar_refeicao():
-    pass
+    ''' Precisará receber Nome, Descrição e Dentro_da_dieta como parametro
+    para criar um objeto do tipo refeição no banco de dados. '''
+    data = request.json
+    nome = data.get("nome")
+    descricao = data.get("descricao")
+    dentro_da_dieta = data.get("dentro_da_dieta")
+
+    if nome and descricao and dentro_da_dieta:
+        r = Refeicao(nome=nome, descricao=descricao, dentro_da_dieta=dentro_da_dieta)
+        db.session.add(r)
+        db.session.commit()
+        return jsonify({'message': 'Refeição cadastrada com sucesso.'})
+    
+    return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
 
 # Listar todas as refeições
