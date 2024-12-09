@@ -10,17 +10,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db.init_app(app=app)
 
 
+# Rota teste
 @app.route("/", methods=['GET'])
 def welcome():
     return "Welcome! You've been here."
 
 
-@app.route("/refeicao", methods=['POST'])  # Registrar uma refeição feita
+# Registrar uma refeição feita
+@app.route("/refeicao", methods=['POST'])
 def criar_refeicao():
     pass
 
 
-@app.route("/refeicao", methods=['GET'])  # Listar todas as refeições
+# Listar todas as refeições
+@app.route("/refeicao", methods=['GET'])
 def listar_refeicoes():
     pass
 
