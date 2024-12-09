@@ -38,7 +38,11 @@ def criar_refeicao():
 # Listar todas as refeições
 @app.route("/refeicao", methods=['GET'])
 def listar_refeicoes():
-    pass
+    dict = []
+    todas_as_refeicoes = Refeicao.query.all()
+    for refeicao in todas_as_refeicoes:
+        dict.append(refeicao.to_dict())
+    return jsonify({"todas_refeicoes": dict})
 
 
 # Visualizar uma única refeição
