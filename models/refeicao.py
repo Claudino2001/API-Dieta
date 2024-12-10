@@ -3,7 +3,9 @@ from datetime import datetime
 
 
 class Refeicao(db.Model):
+    __tablename__ = 'refeicoes'
     id = db.Column(db.Integer, primary_key=True)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     nome = db.Column(db.String(80), nullable=False)
     descricao = db.Column(db.Text, nullable=False)
     data_hora = db.Column(db.DateTime, nullable=False, default=datetime.now)
