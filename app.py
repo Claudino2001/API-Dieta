@@ -121,11 +121,12 @@ def listar_uma_refeicao(id_refeicao):
 
 # Editar uma refeição
 @app.route("/refeicao/<int:id_refeicao>", methods=['PUT'])
+@login_required
 def editar_refeicao(id_refeicao):
     data = request.json 
-    refeicao = Refeicao.query.get(id_refeicao)
+    refeicao = Refeicao.query.filter_by(id=id_refeicao, id_usuario=current_user.id).first()
 
-    if refeicao and data.get("nome") and data.get("descricao") and data.get("data_hora") and data.get("dentro_da_dieta"):
+    if refeicao and data.get("nome") and data.get("descricao") and data.get("data_hora") and data.get("dentro_da_dieta") is not None:
 
         refeicao.nome = data.get("nome")
         refeicao.descricao = data.get("descricao")
