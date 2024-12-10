@@ -44,6 +44,26 @@ def criar_usuario():
     
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
+@app.route("/login", methods=['POST'])
+def login():
+    ''' Precisará receber Nome e Senha como parametro 
+    para autenticar o usuário no sistema. '''
+    data = request.json
+    name = data.get("name")
+    password = data.get("password")
+
+    if name and password:
+        u = User.query.filter_by(name=name).first()
+        if u and u.password == password:
+            login_user(u)
+            print(current_user.is_authenticated)
+            return jsonify({'message': 'Usuário logado com sucesso.'})
+        return jsonify({'message': 'Usuário não encontrado.'}), 404
+    
+    return jsonify({'message': 'Parâmetros inválidos.'}), 400
+
+######################### ROTAS DE REFEIÇÃO #########################
+
 # Registrar uma refeição feita
 @app.route("/refeicao", methods=['POST'])
 def criar_refeicao():
