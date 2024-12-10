@@ -99,9 +99,10 @@ def criar_refeicao():
 
 # Listar todas as refeições
 @app.route("/refeicao", methods=['GET'])
+@login_required
 def listar_refeicoes():
     dict = []
-    todas_as_refeicoes = Refeicao.query.all()
+    todas_as_refeicoes = current_user.refeicoes
     for refeicao in todas_as_refeicoes:
         dict.append(refeicao.to_dict())
     return jsonify({"todas_refeicoes": dict})
