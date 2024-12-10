@@ -62,6 +62,12 @@ def login():
     
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
+@app.route("/logout", methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'message': 'Usuário deslogado com sucesso.'})
+
 ######################### ROTAS DE REFEIÇÃO #########################
 
 # Registrar uma refeição feita
