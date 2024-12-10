@@ -27,6 +27,11 @@ def welcome():
 def load_user(user_id):
     return User.query.get(user_id)
 
+@app.route("/whoim", methods=['GET'])
+@login_required
+def whoim():
+    return jsonify({"Who I'm":f"I'm: [{current_user.id}] - {current_user.name}"})
+
 
 @app.route("/user", methods=['POST'])
 def criar_usuario():
@@ -62,7 +67,7 @@ def login():
     
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
-@app.route("/logout", methods=['POST'])
+@app.route("/logout", methods=['GET'])
 @login_required
 def logout():
     logout_user()
@@ -72,6 +77,7 @@ def logout():
 
 # Registrar uma refeição feita
 @app.route("/refeicao", methods=['POST'])
+@login_required
 def criar_refeicao():
     ''' Precisará receber Nome, Descrição e Dentro_da_dieta como parametro
     para criar um objeto do tipo refeição no banco de dados. '''
@@ -80,8 +86,10 @@ def criar_refeicao():
     descricao = data.get("descricao")
     dentro_da_dieta = data.get("dentro_da_dieta")
 
-    if nome and descricao and dentro_da_dieta:
+    if nome and descricao and dentro_da_dieta is not None:
+        u = User.query.get(current_user.id)
         r = Refeicao(nome=nome, descricao=descricao, dentro_da_dieta=dentro_da_dieta)
+        u.refeicoes.append(r)
         db.session.add(r)
         db.session.commit()
         return jsonify({'message': 'Refeição cadastrada com sucesso.'})
