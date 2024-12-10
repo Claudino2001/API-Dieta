@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "b7154f80-2040-4d40-8735-592373811325",
+		"name": "Flask Controle de Dieta",
+		"description": "1. O usuário pode criar uma conta, fazer login e logout.\n    \n2. O usuário pode add uma refeição.\n    \n3. O usuário tem acesso a toda lista de refeições que ele cadastrou.\n    \n4. O usuário pode editar uma refeição e deletar.\n    \n5. O usuário só tem acesso as suas refeições.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27380596"
+	},
+	"item": [
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/login",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/login",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar conta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"adm\",\r\n    \"password\": \"adm123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "whoim",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/whoim",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"whoim"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Refeição",
+			"item": [
+				{
+					"name": "Criar refeição",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Atum\",\r\n    \"descricao\": \"a nutri não deixou\",\r\n    \"dentro_da_dieta\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/refeicao",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"refeicao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar refeições",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/refeicao",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"refeicao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar refeição",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data_hora\": \"2024-12-10T15:43:37.109228\",\r\n    \"dentro_da_dieta\": true,\r\n    \"descricao\": \"Akim já foi aprovado.\",\r\n    \"nome\": \"Abraço em Akim\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/refeicao/4",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"refeicao",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}/",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Rota de boas vindas. Só para testar o funcionamento da aplicação."
+			},
+			"response": []
+		}
+	]
+}
