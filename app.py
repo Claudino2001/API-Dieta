@@ -110,8 +110,9 @@ def listar_refeicoes():
 
 # Visualizar uma única refeição
 @app.route("/refeicao/<int:id_refeicao>", methods=['GET'])
+@login_required
 def listar_uma_refeicao(id_refeicao):
-    refeicao = Refeicao.query.get(id_refeicao)
+    refeicao = Refeicao.query.filter_by(id=id_refeicao, id_usuario=current_user.id).first()
     if refeicao:
         return jsonify({f"refeicao-{id_refeicao}": refeicao.to_dict()})
     
