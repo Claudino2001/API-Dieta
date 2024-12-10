@@ -3,20 +3,46 @@ from database import db
 from models.user import User
 from models.refeicao import Refeicao
 from datetime import datetime
-
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "your_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
+login_manager = LoginManager()
 db.init_app(app=app)
+login_manager.init_app(app=app)
 
+# Definindo a view de login (quando o usuário não está autenticado)
+login_manager.login_view = 'login'
 
 # Rota teste
 @app.route("/", methods=['GET'])
 def welcome():
     return "Welcome! You've been here."
 
+######################### ROTAS DE USUÁRIO #########################
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+@app.route("/user", methods=['POST'])
+def criar_usuario():
+    ''' Precisará receber Nome e Senha como parametro para criar um objeto do tipo
+    usuário no banco de dados. '''
+    data = request.json
+    name = data.get("name")
+    password = data.get("password")
+
+    if name and password:
+        u = User(name=name, password=password)
+        db.session.add(u)
+        db.session.commit()
+        return jsonify({'message': 'Usuário cadastrado com sucesso.'})
+    
+    return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
 # Registrar uma refeição feita
 @app.route("/refeicao", methods=['POST'])
