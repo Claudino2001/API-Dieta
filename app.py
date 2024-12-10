@@ -4,6 +4,7 @@ from models.user import User
 from models.refeicao import Refeicao
 from datetime import datetime
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+import bcrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "your_secret_key"
@@ -42,8 +43,9 @@ def criar_usuario():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-
+    
     if name and password:
+        password = bcrypt.hashpw(str.encode(password), bcrypt.gensalt()) # Criptografando a senha
         u = User(name=name, password=password)
         db.session.add(u)
         db.session.commit()
@@ -62,9 +64,9 @@ def login():
 
     if name and password:
         u = User.query.filter_by(name=name).first()
-        if u and u.password == password:
+        if u and bcrypt.checkpw(str.encode(password), u.password):
             login_user(u)
-            print(current_user.is_authenticated)
+            print(f"Usuário {u.id} autenticado. Autenticação: {current_user.is_authenticated}")
             return jsonify({'message': 'Usuário logado com sucesso.'})
         return jsonify({'message': 'Usuário não encontrado.'}), 404
 
