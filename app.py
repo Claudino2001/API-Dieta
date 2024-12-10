@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from database import db
-from models import user, refeicao
+from models.user import User
+from models.refeicao import Refeicao
 from datetime import datetime
 
 
