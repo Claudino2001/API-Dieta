@@ -23,14 +23,16 @@ def welcome():
 
 ######################### ROTAS DE USUÁRIO #########################
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
+
 @app.route("/whoim", methods=['GET'])
 @login_required
 def whoim():
-    return jsonify({"Who I'm":f"I'm: [{current_user.id}] - {current_user.name}"})
+    return jsonify({"Who I'm": f"I'm: [{current_user.id}] - {current_user.name}"})
 
 
 @app.route("/user", methods=['POST'])
@@ -46,8 +48,9 @@ def criar_usuario():
         db.session.add(u)
         db.session.commit()
         return jsonify({'message': 'Usuário cadastrado com sucesso.'})
-    
+
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
+
 
 @app.route("/login", methods=['POST'])
 def login():
@@ -64,8 +67,9 @@ def login():
             print(current_user.is_authenticated)
             return jsonify({'message': 'Usuário logado com sucesso.'})
         return jsonify({'message': 'Usuário não encontrado.'}), 404
-    
+
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
+
 
 @app.route("/logout", methods=['GET'])
 @login_required
@@ -75,7 +79,7 @@ def logout():
 
 ######################### ROTAS DE REFEIÇÃO #########################
 
-# Registrar uma refeição feita
+# Registrar uma refeição feita pelo usuário
 @app.route("/refeicao", methods=['POST'])
 @login_required
 def criar_refeicao():
@@ -88,12 +92,13 @@ def criar_refeicao():
 
     if nome and descricao and dentro_da_dieta is not None:
         u = User.query.get(current_user.id)
-        r = Refeicao(nome=nome, descricao=descricao, dentro_da_dieta=dentro_da_dieta)
+        r = Refeicao(nome=nome, descricao=descricao,
+                     dentro_da_dieta=dentro_da_dieta)
         u.refeicoes.append(r)
         db.session.add(r)
         db.session.commit()
         return jsonify({'message': 'Refeição cadastrada com sucesso.'})
-    
+
     return jsonify({'message': 'Parâmetros inválidos.'}), 400
 
 
@@ -112,10 +117,11 @@ def listar_refeicoes():
 @app.route("/refeicao/<int:id_refeicao>", methods=['GET'])
 @login_required
 def listar_uma_refeicao(id_refeicao):
-    refeicao = Refeicao.query.filter_by(id=id_refeicao, id_usuario=current_user.id).first()
+    refeicao = Refeicao.query.filter_by(
+        id=id_refeicao, id_usuario=current_user.id).first()
     if refeicao:
         return jsonify({f"refeicao-{id_refeicao}": refeicao.to_dict()})
-    
+
     return jsonify({"message": f"Refeição {id_refeicao} não encontrada."}), 404
 
 
@@ -123,20 +129,22 @@ def listar_uma_refeicao(id_refeicao):
 @app.route("/refeicao/<int:id_refeicao>", methods=['PUT'])
 @login_required
 def editar_refeicao(id_refeicao):
-    data = request.json 
-    refeicao = Refeicao.query.filter_by(id=id_refeicao, id_usuario=current_user.id).first()
+    data = request.json
+    refeicao = Refeicao.query.filter_by(
+        id=id_refeicao, id_usuario=current_user.id).first()
 
     if refeicao and data.get("nome") and data.get("descricao") and data.get("data_hora") and data.get("dentro_da_dieta") is not None:
 
         refeicao.nome = data.get("nome")
         refeicao.descricao = data.get("descricao")
         refeicao.dentro_da_dieta = data.get("dentro_da_dieta")
-        refeicao.data_hora = datetime.fromisoformat(data.get("data_hora").replace("Z", "+00:00"))
+        refeicao.data_hora = datetime.fromisoformat(
+            data.get("data_hora").replace("Z", "+00:00"))
 
         db.session.commit()
 
         return jsonify({"message": f"Refeição {id_refeicao} atualizada."})
-    
+
     return jsonify({"message": f"Não foi possível atualizar a refeição {id_refeicao}."}), 404
 
 
@@ -144,8 +152,9 @@ def editar_refeicao(id_refeicao):
 @app.route("/refeicao/<int:id_refeicao>", methods=['DELETE'])
 @login_required
 def deletar_refeicao(id_refeicao):
-    refeicao = Refeicao.query.filter_by(id=id_refeicao, id_usuario=current_user.id).first()
-    
+    refeicao = Refeicao.query.filter_by(
+        id=id_refeicao, id_usuario=current_user.id).first()
+
     if refeicao:
         db.session.delete(refeicao)
         db.session.commit()
